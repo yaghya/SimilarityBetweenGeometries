@@ -13,7 +13,6 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
-// Optional includes and defines to handle c-arrays as points, std::vectors as linestrings
 #include <boost/geometry/geometries/register/linestring.hpp>
 #include <boost/geometry/geometries/adapted/c_array.hpp>
 
@@ -28,13 +27,11 @@ D max(D a,D b)
 }
 template <typename E>
 E min(E a,E b)
-{
-	//E A[3]={a,b,c};
-	//E min=numeric_limits<double>::infinity();
+{	
 	return (a<b)?a:b;
-	//return min;
 }
 
+//finding the Coupling Distance using the Pseudo code written in Readme file
 template <typename Index,typename Matrix,typename LineString>
 inline double coup(Index i,Index j, LineString ls1, LineString ls2, Matrix CoupMat)
 {
@@ -65,16 +62,9 @@ inline double FrechetDistance(LineString ls1,LineString ls2)
  	unsigned int  b = boost::size(ls2);
  	std::cout << "size of linestring2 ="<< b << std::endl;
  	bnu::matrix<double>  CoupMat(a,b,-1);
-/* 	double CoupMat[a][b];
- 	for(unsigned int i=0;i<a;i++)
- 	{
- 		for(unsigned int j=0;j<b;j++)
- 		{
- 			CoupMat[i][j]=-1;
- 		}
- 	}
- */	
- 	std::cout << typeid(CoupMat).name() << std::endl;
+ 	
+ 	//calling Recursion to get the coupling distance
  	Dis=coup(a-1,b-1,ls1,ls2,CoupMat);
+
 	return Dis;
 }
