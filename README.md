@@ -2,12 +2,12 @@
 ## (Implemented the following as the competency test for **Boost.Geometry** Gsoc '18)
 
 # **Pseudo code for finding Coupling Distance** <br />
-##(frechet distance for curve formed by discrete points)<br />
-Function dF(P, Q): real;<br />
-input:polygonal curves P= (u1, . . . , up) and Q= (v1, . . . , vq).<br />
-return:δdF(P, Q)<br />
-ca:array[1..p,1..q] of real;<br />
-function c(i, j): real;<br />
+#(frechet distance for curve formed by discrete points)<br />
+>Function dF(P, Q): real;<br />
+>input:polygonal curves P= (u1, . . . , up) and Q= (v1, . . . , vq).<br />
+>return:δdF(P, Q)<br />
+>ca:array[1..p,1..q] of real;<br />
+>function c(i, j): real;<br />
 >	begin<br />
 >>		if ca(i, j)>−1 then return ca(i, j)<br />
 >>		elsif i= 1 and j= 1 then ca(i, j) :=d(u1, v1)<br />
