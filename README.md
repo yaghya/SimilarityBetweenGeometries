@@ -24,6 +24,7 @@ begin<br />
 e.<br />
 <br />
 //Reference:- Computing Discrete Fr ́echet Distance by Thomas Eiter and Heikki Mannila //
+//http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf//
 
 # How to use this header: 
   1. Clone/Download this directory (or the file "FrechetDistance.hpp")
