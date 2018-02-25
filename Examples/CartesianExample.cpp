@@ -1,4 +1,8 @@
-
+/*  
+        Boost Competency Test (Gsoc '18)
+        Author : Yaghyavardhan Sing Khangarot
+        Institute: IIIT Hyderabad
+*/
 
 #include <algorithm> 
 #include <iostream>
