@@ -21,7 +21,7 @@
 begin<br />
 >	for i = 1 to p do for j= 1 to q do ca(i, j) :=−1.0;<br />
 >	return c(p, q);<br />
-e.<br />
+end.<br />
 <br />
 //Reference:- Computing Discrete Fr ́echet Distance by Thomas Eiter and Heikki Mannila //
 //http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf//
