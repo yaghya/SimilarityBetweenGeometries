@@ -25,15 +25,40 @@
 
 namespace bnu = boost::numeric::ublas;
 namespace bg = boost::geometry;
-//typedef  bg:: strategy :: distance ::haversine HaverSineDistance;
 
-template <typename D>
-D max(D a,D b)
+//Printing the Coupling Matrix
+template <typename Mat,typename index>
+class PrintMatrix {
+private:
+	Mat Matri;
+	index a;
+	index b;
+public:
+    PrintMatrix(Mat M, index a,index b);
+    void print();
+};
+template <typename Mat,typename index>
+PrintMatrix<Mat,index>::PrintMatrix(Mat M, index a1,index b1){
+	Matri=M;
+	a=a1;
+	b=b1;
+}
+template <typename Mat,typename index>
+void PrintMatrix<Mat,index>::print() {
+    for (int i = 0; i < a; i++)
+    	for(int j=0;j < b;j++)
+        	std::cout<<" "<<Matri(i,j);
+    	std::cout << std::endl;
+}
+
+
+template <typename DataType>
+DataType max(DataType a,DataType b)
 {
 	return (a>b)?a:b;
 }
-template <typename E>
-E min(E a,E b)
+template <typename ElementType>
+ElementType min(ElementType a,ElementType b)
 {	
 	return (a<b)?a:b;
 }
@@ -75,6 +100,7 @@ template <typename Index,typename Matrix,typename LineString>
 inline double coup(Index i,Index j, LineString ls1, LineString ls2, Matrix CoupMat)
 {
 	//double Inf=numeric_limits<double>::infinity();
+	//Print CoupLing Matrix
 	double Inf=10000000;
 	if(CoupMat(i,j)>-1)
 			return CoupMat(i,j);
@@ -92,6 +118,7 @@ inline double coup(Index i,Index j, LineString ls1, LineString ls2, Matrix CoupM
 }
 
 
+
 template<typename LineString>
 inline double FrechetDistance(LineString ls1,LineString ls2)
 {
@@ -104,6 +131,12 @@ inline double FrechetDistance(LineString ls1,LineString ls2)
  	
  	//calling Recursion to get the coupling distance
  	Dis=coup(a-1,b-1,ls1,ls2,CoupMat);
+ 	//Print CoupLing Matrix
 
+ 	/*
+ 	PrintMatrix<bnu::matrix<double>,int> A(CoupMat,a,b);
+ 	A.print();
+	*/
+	
 	return Dis;
 }
