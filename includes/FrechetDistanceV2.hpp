@@ -45,13 +45,15 @@ PrintMatrix<Mat,index>::PrintMatrix(Mat M, index a1,index b1){
 }
 template <typename Mat,typename index>
 void PrintMatrix<Mat,index>::print() {
-	std::cout << "Values in Coupling Matrix" << std::endl;
-    for (int i = 0; i < a; i++)
-    {	
-    	for(int j=0;j < b;j++)
+ 	std::cout << "Values in Coupling Matrix" << std::endl;
+    for (int i = 1; i <=a; i++)
+    {
+		for(int j=1;j <=b;j++)
+    	{
         	std::cout<<" "<<Matri(i,j);
+    	}
     	std::cout << std::endl;
-    }	
+    }
 }
 
 
@@ -98,30 +100,6 @@ double  Distance(Point const& P1,Point const& P2)
 
 }
 
-//finding the Coupling Distance using the Pseudo code written in Readme file
-template <typename Index,typename Matrix,typename LineString>
-inline double coup(Index i,Index j, LineString ls1, LineString ls2, Matrix CoupMat)
-{
-	//double Inf=numeric_limits<double>::infinity();
-	//Print CoupLing Matrix
-	double Inf=10000000;
-	if(CoupMat(i,j)>-1)
-			return CoupMat(i,j);
-	else if (i==1 && j==1)
-		CoupMat(i,j)= Distance(ls1[i],ls2[j]);
-	else if (i==1 &&  j>1 )
-		CoupMat(i,j)= max(coup(i,j-1,ls1,ls2,CoupMat),Distance(ls1[i],ls2[j]));
-	else if (i>1 && j==1)
-		CoupMat(i,j)= max(coup(i-1,j,ls1,ls2,CoupMat),Distance(ls1[i],ls2[j]));
-	else if (i>1 && j>1)
-		CoupMat(i,j)= max(min(min(coup(i,j-1,ls1,ls2,CoupMat),coup(i-1,j,ls1,ls2,CoupMat)),coup(i-1,j-1,ls1,ls2,CoupMat)),Distance(ls1[i],ls2[j]));
-	else
-		return Inf;
-
-}
-
-
-
 template<typename LineString>
 inline double FrechetDistance(LineString ls1,LineString ls2)
 {
@@ -130,16 +108,34 @@ inline double FrechetDistance(LineString ls1,LineString ls2)
  	std::cout <<"size of linestring1 ="<< a << std::endl;
  	unsigned int  b = boost::size(ls2);
  	std::cout << "size of linestring2 ="<< b << std::endl;
- 	bnu::matrix<double>  CoupMat(a,b,-1);
- 	
+ 	bnu::matrix<double>  CoupMat(a+1,b+1,-1);
+ 	//findin the Coupling
  	//calling Recursion to get the coupling distance
- 	Dis=coup(a-1,b-1,ls1,ls2,CoupMat);
+ 	double inf=1.0/0.0;
+ 	for(unsigned int i=1;i<=a;i++)
+ 	{
+ 		for(unsigned  int j=1;j<=b;j++)
+ 		{
+ 			if(i==1 && j==1)
+ 				CoupMat(i,j)= Distance(ls1[i],ls2[j]);
+ 			else if(i==1 && j>1)
+ 				CoupMat(i,j)=max(CoupMat(i,j-1),Distance(ls1[i],ls2[j]));
+ 			else if(i>1 && j==1)
+ 				CoupMat(i,j)=max(CoupMat(i-1,j),Distance(ls1[i],ls2[j]));
+ 			else if(i>1 && j>1)
+ 				CoupMat(i,j)=max(min(min(CoupMat(i,j-1),CoupMat(i-1,j)),CoupMat(i-1,j-1)),Distance(ls1[i],ls2[j]));
+ 			else
+ 				CoupMat(i,j)=inf;
+ 		}
+ 	}
+
  	//Print CoupLing Matrix
 
- 	/*
+ 	
  	PrintMatrix<bnu::matrix<double>,int> A(CoupMat,a,b);
  	A.print();
-	*/
+	//Final Coupling Distance
+	Dis=CoupMat(a,b);
 	
 	return Dis;
 }

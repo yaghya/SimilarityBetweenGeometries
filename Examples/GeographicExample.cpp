@@ -11,7 +11,7 @@
 #include <vector>
 #include <limits>
 
-#include "../includes/FrechetDistance.hpp"
+#include "../includes/FrechetDistanceV2.hpp"
 
 #include <boost/geometry/geometry.hpp>
 #include <boost/geometry/geometries/linestring.hpp>
