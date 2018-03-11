@@ -24,7 +24,7 @@
 #include <boost/geometry/geometries/register/linestring.hpp>
 #include <boost/geometry/geometries/adapted/c_array.hpp>
 
-BOOST_GEOMETRY_REGISTER_C_ARRAY_CS(cs::geographic<degree>)
+BOOST_GEOMETRY_REGISTER_C_ARRAY_CS(cs::spherical<degree>)
 namespace bnu = boost::numeric::ublas;
 namespace bg = boost::geometry;
 BOOST_GEOMETRY_REGISTER_LINESTRING_TEMPLATED(std::vector)
@@ -39,7 +39,7 @@ int main(void)
 
     // Define a linestring, which is a vector of points, and add some points
     // Point defined as latitude and longitude
-    typedef bg::model::point<double, 2, boost::geometry::cs::geographic<degree> > point_2d;
+    typedef bg::model::point<double, 2, boost::geometry::cs::spherical<degree> > point_2d;
     typedef model::linestring<point_2d> linestring_2d;
     linestring_2d ls1,ls2;
 
@@ -55,13 +55,13 @@ int main(void)
     // Lines can be streamed using DSV (delimiter separated values)
     std::cout << dsv(ls1) << std::endl;
     
- 	const double c[][2] = { {3.1, 3.1}, {4.9, 1.1}, {3.1, 1.9} };
- 	append(ls2, c);
+    const double c[][2] = { {3.1, 3.1}, {4.9, 1.1}, {3.1, 1.9} };
+    append(ls2, c);
     std::cout << dsv(ls2) << std::endl;
 
- 	double FrechDis;
- 	FrechDis=FrechetDistance(ls1,ls2);
- 	std::cout <<"FrechetDistance= " << FrechDis << std::endl;
+    double FrechDis;
+    FrechDis=FrechetDistance(ls1,ls2);
+    std::cout <<"FrechetDistance= " << FrechDis << std::endl;
     return 0;
 
  }
