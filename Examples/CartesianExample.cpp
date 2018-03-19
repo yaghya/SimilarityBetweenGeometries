@@ -52,10 +52,10 @@ int main(void)
     append(ls1, lp);
     append(ls1,make<point_2d>(4.5,7.0));
  
- /*
-    typedef bg::coordinate_type<point_2d>::type CordType;
+ 
+    typedef bg::coordinate_system<point_2d>::type CordType;
     std::cout << typeid(CordType).name() << std::endl;
-*/
+
 
     // Lines can be streamed using DSV (delimiter separated values)
     std::cout << dsv(ls1) << std::endl;

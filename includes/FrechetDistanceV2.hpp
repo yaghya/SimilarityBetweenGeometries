@@ -58,12 +58,13 @@ void PrintMatrix<Mat,index>::print() {
 
 
 template <typename DataType>
-DataType max(DataType a,DataType b)
+static inline DataType max(DataType a,DataType b)
 {
 	return (a>b)?a:b;
 }
+
 template <typename ElementType>
-ElementType min(ElementType a,ElementType b)
+static inline ElementType min(ElementType a,ElementType b)
 {	
 	return (a<b)?a:b;
 }
@@ -82,26 +83,38 @@ bool isSubSequence(char str1[], char str2[], int m, int n)
     return isSubSequence(str1, str2, m, n-1);
 }
 
+//Calculating distance as per the Cartesian system
 template <typename Point>
-double  Distance(Point const& P1,Point const& P2)
+static inline double  Distance(Point const& P1,Point const& P2)
 {
-	//std::cout << typeid(Point).name() << std::endl;
-	std::string Str2=typeid(Point).name(),Str1="geographic";
-	bool flag=isSubSequence(&Str1[0],&Str2[0],(int)Str1.length(),(int)Str2.length());
-	
-	if(flag)
+	std::string Str2=typeid(Point).name(),Str1="geographic",Str3="spherical";
+	bool flag1=isSubSequence(&Str1[0],&Str2[0],(int)Str1.length(),(int)Str2.length());
+	bool flag2=isSubSequence(&Str3[0],&Str2[0],(int)Str3.length(),(int)Str2.length());
+
+	if(flag1)
 	{
 		double Radius=6371; // in Kliometer
 		typedef  bg:: strategy :: distance :: haversine<double> HaverSineDistance;
 		return bg::distance(P1,P2,HaverSineDistance(Radius));
 	}
-	else
-		return bg::distance(P1,P2);
+	else if(flag2)
+	{
+		double Radius=1; // radius of sphere
+		typedef  bg:: strategy :: distance :: haversine<double> HaverSineDistance;
+		return bg::distance(P1,P2,HaverSineDistance(Radius));
+	}
+	else 
+	{
+
+		typedef  bg:: strategy :: distance :: pythagoras<double> PythagorasDistance;
+
+		return bg::distance(P1,P2,PythagorasDistance());
+	}	
 
 }
 
 template<typename LineString>
-inline double FrechetDistance(LineString ls1,LineString ls2)
+static inline double FrechetDistance(LineString ls1,LineString ls2)
 {
 	double Dis=0;
 	unsigned int  a = boost::size(ls1);
@@ -111,7 +124,7 @@ inline double FrechetDistance(LineString ls1,LineString ls2)
  	bnu::matrix<double>  CoupMat(a+1,b+1,-1);
  	//findin the Coupling
  	//calling Recursion to get the coupling distance
- 	double inf=1.0/0.0;
+ 	double NonFeasible=-100;
  	for(unsigned int i=1;i<=a;i++)
  	{
  		for(unsigned  int j=1;j<=b;j++)
@@ -125,7 +138,7 @@ inline double FrechetDistance(LineString ls1,LineString ls2)
  			else if(i>1 && j>1)
  				CoupMat(i,j)=max(min(min(CoupMat(i,j-1),CoupMat(i-1,j)),CoupMat(i-1,j-1)),Distance(ls1[i],ls2[j]));
  			else
- 				CoupMat(i,j)=inf;
+ 				CoupMat(i,j)=NonFeasible;
  		}
  	}
 
@@ -134,6 +147,9 @@ inline double FrechetDistance(LineString ls1,LineString ls2)
  	
  	PrintMatrix<bnu::matrix<double>,int> A(CoupMat,a,b);
  	A.print();
+
+ 	//std::cout << CoupMat << std::endl;
+	
 	//Final Coupling Distance
 	Dis=CoupMat(a,b);
 	

@@ -39,9 +39,13 @@ int main(void)
 
     // Define a linestring, which is a vector of points, and add some points
     // Point defined as latitude and longitude
-    typedef bg::model::point<double, 2, boost::geometry::cs::spherical<degree> > point_2d;
+    typedef bg::model::point<double, 2, bg::cs::spherical<degree> > point_2d;
     typedef model::linestring<point_2d> linestring_2d;
     linestring_2d ls1,ls2;
+
+    typedef bg::coordinate_system<point_2d>::type CordType;
+    std::cout << typeid(CordType).name() << std::endl;
+
 
     // points can be created using "make" and added to a linestring using the std:: "push_back"
     ls1.push_back(make<point_2d>(1.1, 1.1));

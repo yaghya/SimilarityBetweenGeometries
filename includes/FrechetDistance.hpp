@@ -19,6 +19,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
+
 #include <boost/geometry/geometries/register/linestring.hpp>
 #include <boost/geometry/geometries/adapted/c_array.hpp>
 
@@ -43,6 +44,7 @@ PrintMatrix<Mat,index>::PrintMatrix(Mat M, index a1,index b1){
 	a=a1;
 	b=b1;
 }
+
 template <typename Mat,typename index>
 void PrintMatrix<Mat,index>::print() {
 	std::cout << "Values in Coupling Matrix" << std::endl;
@@ -56,12 +58,13 @@ void PrintMatrix<Mat,index>::print() {
 
 
 template <typename DataType>
-DataType max(DataType a,DataType b)
+static inline DataType max(DataType a,DataType b)
 {
 	return (a>b)?a:b;
 }
+
 template <typename ElementType>
-ElementType min(ElementType a,ElementType b)
+static inline ElementType min(ElementType a,ElementType b)
 {	
 	return (a<b)?a:b;
 }
@@ -80,21 +83,33 @@ bool isSubSequence(char str1[], char str2[], int m, int n)
     return isSubSequence(str1, str2, m, n-1);
 }
 
+//Calculating distance as per the Cartesian system
 template <typename Point>
-double  Distance(Point const& P1,Point const& P2)
+static inline double  Distance(Point const& P1,Point const& P2)
 {
-	//std::cout << typeid(Point).name() << std::endl;
-	std::string Str2=typeid(Point).name(),Str1="geographic";
-	bool flag=isSubSequence(&Str1[0],&Str2[0],(int)Str1.length(),(int)Str2.length());
-	
-	if(flag)
+	std::string Str2=typeid(Point).name(),Str1="geographic",Str3="spherical";
+	bool flag1=isSubSequence(&Str1[0],&Str2[0],(int)Str1.length(),(int)Str2.length());
+	bool flag2=isSubSequence(&Str3[0],&Str2[0],(int)Str3.length(),(int)Str2.length());
+
+	if(flag1)
 	{
 		double Radius=6371; // in Kliometer
 		typedef  bg:: strategy :: distance :: haversine<double> HaverSineDistance;
 		return bg::distance(P1,P2,HaverSineDistance(Radius));
 	}
-	else
-		return bg::distance(P1,P2);
+	else if(flag2)
+	{
+		double Radius=1; // radius of sphere
+		typedef  bg:: strategy :: distance :: haversine<double> HaverSineDistance;
+		return bg::distance(P1,P2,HaverSineDistance(Radius));
+	}
+	else 
+	{
+
+		typedef  bg:: strategy :: distance :: pythagoras<double> PythagorasDistance;
+
+		return bg::distance(P1,P2,PythagorasDistance());
+	}	
 
 }
 
@@ -102,9 +117,8 @@ double  Distance(Point const& P1,Point const& P2)
 template <typename Index,typename Matrix,typename LineString>
 inline double coup(Index i,Index j, LineString ls1, LineString ls2, Matrix CoupMat)
 {
-	//double Inf=numeric_limits<double>::infinity();
-	//Print CoupLing Matrix
-	double Inf=10000000;
+	
+	double NonFeasible=-100; //for NonFeasible argument
 	if(CoupMat(i,j)>-1)
 			return CoupMat(i,j);
 	else if (i==1 && j==1)
@@ -116,7 +130,7 @@ inline double coup(Index i,Index j, LineString ls1, LineString ls2, Matrix CoupM
 	else if (i>1 && j>1)
 		CoupMat(i,j)= max(min(min(coup(i,j-1,ls1,ls2,CoupMat),coup(i-1,j,ls1,ls2,CoupMat)),coup(i-1,j-1,ls1,ls2,CoupMat)),Distance(ls1[i],ls2[j]));
 	else
-		return Inf;
+		return NonFeasible;
 
 }
 
