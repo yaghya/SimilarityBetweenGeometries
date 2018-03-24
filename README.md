@@ -7,7 +7,7 @@
 >input:polygonal curves P= (u1, . . . , up) and Q= (v1, . . . , vq).<br />
 >return:δdF(P, Q)<br />
 >ca:array[1..p,1..q] of real;<br />
->function c(i, j): real;<br />
+>function CouplingMeasure(i, j): real;<br />
 >	begin<br />
 >>		if ca(i, j)>−1 then return ca(i, j)<br />
 >>		elsif i= 1 and j= 1 then ca(i, j) :=d(u1, v1)<br />
@@ -15,10 +15,10 @@
 >>		elsif i= 1 and j >1 then ca(i, j) := max{c(1, j−1), d(u1, vj)}<br />
 >>		elsif i >1 and j >1 then ca(i, j) :=max{min(c(i−1, j), c(i−1, j−1), c(i, j−1)), d(ui, vj)}<br />
 >>		else ca(i, j)=∞<br />
->>	return ca(i, j);<br />
+>	return ca(i, j);<br />
 >	end;<br />
-/* function c */<br /><br />
-begin<br />
+/* function ComputeFrechetDistance */<br /><br />
+>	begin<br />
 >	for i = 1 to p<br />
 >	do<br/>
 >>		for j= 1 to q<br/> 
