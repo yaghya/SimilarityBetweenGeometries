@@ -17,14 +17,15 @@
 >>		else ca(i, j)=∞<br />
 >	return ca(i, j);<br />
 >	end;<br />
-/* function ComputeFrechetDistance */<br /><br />
+<br/>
+> function ComputeFrechetDistance <br />
 >	begin<br />
 >	for i = 1 to p<br />
 >	do<br/>
 >>		for j= 1 to q<br/> 
 >>		do ca(i, j) :=−1.0;<br />
 >	return c(p, q);<br />
-end.<br />
+>	end.<br />
 <br />
 //Reference:- Computing Discrete Fr ́echet Distance by Thomas Eiter and Heikki Mannila //
 //http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf//
