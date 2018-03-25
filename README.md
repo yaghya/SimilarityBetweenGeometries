@@ -16,8 +16,7 @@
 >>		elsif i >1 and j >1 then ca(i, j) :=max{min(c(i−1, j), c(i−1, j−1), c(i, j−1)), d(ui, vj)}<br />
 >>		else ca(i, j)=∞<br />
 >	return ca(i, j);<br />
->	end;<br />
-<br/>
+>	end;<br /><br/>
 > function ComputeFrechetDistance <br />
 >	begin<br />
 >	for i = 1 to p<br />
