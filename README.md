@@ -1,4 +1,4 @@
-# SimmilarityBetweenGeometries
+# SimilarityBetweenGeometries
 ## (Implemented the following as the competency test for **Boost.Geometry** Gsoc '18)
 
 # **Pseudo code for finding Coupling Distance** <br />
